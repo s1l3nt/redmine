@@ -41,7 +41,7 @@
   <%- @issues.each do |issue| -%>
     <tr class="issue hascontextmenu">
       <td class="checkbox"><%= check_box_tag 'ids[]', issue.id, false, :id => nil %></td>
-      <td class="subject"><%= link_to_issue(issue, :project => (@project != issue.project)) %></td>
+      <td class="subject"><%= link_to_issue(issue, :project => (@project != issue.project), :status => true) %></td>
     </tr>
   <% end %>
   </table>

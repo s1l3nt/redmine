@@ -66,10 +66,12 @@ module ApplicationHelper
   #   link_to_issue(issue, :subject => false)     # => Defect #6
   #   link_to_issue(issue, :project => true)      # => Foo - Defect #6
   #   link_to_issue(issue, :subject => false, :tracker => false)     # => #6
+  #   link_to_issue(issue, :status  => true)      # => Defect #6: [ In Progress ] This is the subject
   #
   def link_to_issue(issue, options={})
     title = nil
     subject = nil
+    status = nil
     text = options[:tracker] == false ? "##{issue.id}" : "#{issue.tracker} ##{issue.id}"
     if options[:subject] == false
       title = truncate(issue.subject, :length => 60)
@@ -79,8 +81,13 @@ module ApplicationHelper
         subject = truncate(subject, :length => options[:truncate])
       end
     end
+    if options[:status]
+      status = "[ #{issue.status} ]"
+    end
     s = link_to text, issue_path(issue), :class => issue.css_classes, :title => title
-    s << h(": #{subject}") if subject
+    s << h(": #{subject}") if subject && !status
+    s << h(": #{status} ") if status && !subject
+    s << h(": #{status} #{subject}") if status && subject
     s = h("#{issue.project} - ") + s if options[:project]
     s
   end
